@@ -86,7 +86,8 @@ func findTask(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(resp)
 	}
-	fmt.Println(http.StatusBadRequest)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
 }
 
 func deleteTask(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +97,8 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 	}
-	fmt.Println(http.StatusBadRequest)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
 }
 
 func main() {
