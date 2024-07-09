@@ -75,30 +75,30 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 
 func findTask(w http.ResponseWriter, r *http.Request) {
 	nomber := chi.URLParam(r, "id")
-	if _, ok := tasks[nomber]; ok {
-		resp, err := json.Marshal(tasks[nomber])
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(resp)
+	if _, ok := tasks[nomber]; !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
+	resp, err := json.Marshal(tasks[nomber])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusBadRequest)
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }
 
 func deleteTask(w http.ResponseWriter, r *http.Request) {
 	nomber := chi.URLParam(r, "id")
-	if _, ok := tasks[nomber]; ok {
-		delete(tasks, nomber)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+	if _, ok := tasks[nomber]; !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
+	delete(tasks, nomber)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusBadRequest)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func main() {
